@@ -1,0 +1,107 @@
+openapi: "3.0.1"
+info:
+  title: "Kata Energy API"
+  version: "v1.0"
+paths:
+    /api/v1/offers:
+       post:
+          tags:
+            - offers
+          summary: Add a new offer
+          description: Add a new offer
+          operationId: createOffer
+          requestBody:
+            $ref: '#/components/requestBodies/OfferCreationRequest'
+          responses:
+            '200':
+              description: Successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Offer'
+            '405':
+              description: Invalid input
+       get:
+          tags:
+            - offers
+          summary: Get all offers
+          description: get all offers
+          operationId: getOffers
+          responses:
+            '200':
+              description: A list of all offers
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Offers'
+
+components:
+    schemas:
+        Market:
+            type: object
+            enum:
+                - PRIMARY_RESERVE
+                - SECONDARY_RESERVE
+                - FAST_RESERVE
+        Offer:
+            description: Offer placed on the market and containing one or more time blocks
+            type: object
+            properties:
+                id:
+                    description: Offer id
+                    type: string
+                    format: uuid
+                    readOnly: true
+                market:
+                    description:
+                    $ref:  '#/components/schemas/Market'
+                timeBlocks:
+                    type: array
+                    items:
+                        $ref:  '#/components/schemas/TimeBlocks'
+
+        Offers:
+            description: List of offers
+            type: object
+            properties:
+                market:
+                    description:
+                    $ref:  '#/components/schemas/Market'
+                timeBlocks:
+                    type: array
+                    items:
+                        $ref:  '#/components/schemas/TimeBlocks'
+
+        TimeBlock:
+            description: The time block shows the amount of energy (in MW) that will be produced and a floor price below which we will not sell.
+            type: object
+            properties:
+                id:
+                    description: time block id
+                    type: string
+                    format: uuid
+                energyQuantity:
+                    description: Energy quantity in megaWatt
+                    type: integer
+                    format: int32
+                    example: 35
+                priceLimit:
+                    description: price limit
+                    type: integer
+                    format: int32
+                    example: 2500
+
+        TimeBlocks:
+            description: List of time blocks
+            type: array
+            items:
+                 $ref:  '#/components/schemas/TimeBlock'
+
+    requestBodies:
+        OfferCreationRequest:
+            description: Offer to create
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Offer'
+            required: true
