@@ -38,7 +38,8 @@ paths:
 components:
     schemas:
         Market:
-            type: object
+            type: string
+            nullable: false
             enum:
                 - PRIMARY_RESERVE
                 - SECONDARY_RESERVE
@@ -46,35 +47,43 @@ components:
         Offer:
             description: Offer placed on the market and containing one or more time blocks
             type: object
+            required:
+              - market
+              - timeBlocks
             properties:
                 id:
                     description: Offer id
                     type: string
                     format: uuid
                     readOnly: true
+
                 market:
-                    description:
                     $ref:  '#/components/schemas/Market'
+                    required: true
+                    nullable: false
                 timeBlocks:
-                    type: array
-                    items:
-                        $ref:  '#/components/schemas/TimeBlocks'
+                    $ref:  '#/components/schemas/TimeBlocks'
+                    required: true
 
         Offers:
             description: List of offers
             type: object
+            required:
+              - market
+              - timeBlocks
             properties:
                 market:
                     description:
                     $ref:  '#/components/schemas/Market'
                 timeBlocks:
-                    type: array
-                    items:
-                        $ref:  '#/components/schemas/TimeBlocks'
+                    $ref:  '#/components/schemas/TimeBlocks'
 
         TimeBlock:
             description: The time block shows the amount of energy (in MW) that will be produced and a floor price below which we will not sell.
             type: object
+            required:
+              - energyQuantity
+              - priceLimit
             properties:
                 id:
                     description: time block id
@@ -94,6 +103,8 @@ components:
         TimeBlocks:
             description: List of time blocks
             type: array
+            oneOf:
+              - minItems: 1
             items:
                  $ref:  '#/components/schemas/TimeBlock'
 

@@ -39,6 +39,8 @@ openApiGenerate {
             basePackage: "equinton.dev.kata.energy",
             useSpringController: "false",
             useSpringBoot3: "true",
+            performBeanValidation: "true",
+            useBeanValidation: "true"
     ]
 }
 dependencies {
