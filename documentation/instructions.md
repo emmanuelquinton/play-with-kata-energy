@@ -1,25 +1,24 @@
-Un entreprise à comme métier de vendre de l'énergie sur plusieurs marchés.
-il y a 3 principaux marchés:
+A company's job is to sell energy on several markets.
+There are 3 main markets:
 
-- celui de la Réserve Primaire
-- la Réserve Secondaire
-- la Réserve Rapide.
- 
-Sur chacun de ces marchés L'entreprise peut placer une offre composée de plusieurs "blocs" horaires (une journée de 24h pourrait contenir 8 blocs de 3 heures). 
-Chaque bloc horaire présente la quantité d'énergie (en MW) qui sera produite et un prix plancher au-dessous duquel on ne vendra pas.
+- Primary Reserve
+- Secondary Reserve
+- the Rapid Reserve.
 
-Les parcs producteurs d'électricité, de différents types:
-- solaires
-- éoliens
-- hydrauliques
+On each of these markets, the company can place a bid made up of several hourly "blocks" (a 24-hour day might contain 8 blocks of 3 hours).
+Each hourly block shows the amount of energy (in MW) that will be produced, and a floor price below which it will not sell.
 
-Ces parcs sont capables de fournir un certain nombre de MégaWatt pendant la durée d'un bloc horaire.
-Pour permettre la traçabilité de la production électrique (garantie d'origine), on doit pouvoir connaître le(s) parc(s) qui va(vont) produire l'électricité d'une offre.
+There are 3 types of electricity-generating parks
+- solar
+- wind
+- hydroelectric
 
+These parks are capable of supplying a certain number of MegaWatts for the duration of an hourly block.
+To enable traceability of electricity production (guarantee of origin), we need to know which park(s) will produce the electricity for a given offer.
 
-L'oobjectif du kata est  d'implémenter les APIs permettant :
+The aim of the kata is to implement APIs enabling :
 
-- de créer une offre
-- de créer un parc
-- de lister les offres proposées par l'entrepise pour chaque marché 
-- d'obtenir la liste des parcs qui vendent sur un marché.
+- create an offer
+- create a park
+- list the offers proposed by the company for each market
+- obtain the list of fleets selling on a given market.
