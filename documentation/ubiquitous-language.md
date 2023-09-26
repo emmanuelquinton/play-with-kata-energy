@@ -1,6 +1,7 @@
+### Presentation
+This page defines all word that we use in this project.
 
-## Ubiquitous language
-
+### words
 - Park:  Electricity-generating park
 - Market : Energy sales location
 - Offer: Sales offer for a given market and number of time blocks
