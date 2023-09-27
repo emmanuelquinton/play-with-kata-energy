@@ -20,8 +20,4 @@ public class OfferController implements OffersApi{
         return ResponseEntity.status(HttpStatus.CREATED).body(OfferMapper.INSTANCE.toDto(offer));
     }
 
-    @Override
-    public ResponseEntity<OffersDto> getOffers() {
-        return null;
-    }
 }

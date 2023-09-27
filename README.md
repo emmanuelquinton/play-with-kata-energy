@@ -4,10 +4,13 @@
 
 [instructions du kata](documentation/instructions.md)
 
-### Dictionnaire de donnée
+### Ubiquitous language
+
+[ubiquitous-language.md](documentation/ubiquitous-language.md)
 
 
-
+### Project presentation
+[project presentation](documentation%2Fproject-presentation.md)
 
 
 ### Run project locaaly
@@ -18,13 +21,9 @@
 ```
 * execute the project
 ```shell
-./gradlew clean build
+./gradlew bootRun
 ```
 
-### Openapi
-To create the API, I used openAPI [specification](https://swagger.io/specification/)
+### Call endpoint 
 
-The openApi Gradle [generator](https://github.com/OpenAPITools/openapi-generator/blob/master/modules/openapi-generator-gradle-plugin/README.adoc) allows us to generate:
-
-- interfaces of the endpoint
-- DTO
+Import kata-energy.postman_collection.json in postman and execute the endpoint

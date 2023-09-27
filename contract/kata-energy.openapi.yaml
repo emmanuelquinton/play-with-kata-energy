@@ -2,117 +2,203 @@ openapi: "3.0.1"
 info:
   title: "Kata Energy API"
   version: "v1.0"
+servers:
+  - url: http://localhost:8080
 paths:
-    /api/v1/offers:
-       post:
-          tags:
-            - offers
-          summary: Add a new offer
-          description: Add a new offer
-          operationId: createOffer
-          requestBody:
-            $ref: '#/components/requestBodies/OfferCreationRequest'
-          responses:
-            '200':
-              description: Successful operation
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Offer'
-            '405':
-              description: Invalid input
-       get:
-          tags:
-            - offers
-          summary: Get all offers
-          description: get all offers
-          operationId: getOffers
-          responses:
-            '200':
-              description: A list of all offers
-              content:
-                application/json:
-                  schema:
-                    $ref: '#/components/schemas/Offers'
+  /api/v1/offers:
+    post:
+      tags:
+        - offers
+      summary: Add a new offer
+      description: Add a new offer
+      operationId: createOffer
+      requestBody:
+        $ref: '#/components/requestBodies/OfferCreationRequest'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+        '400':
+          description: Business rules error or parameters validation fail
+        '500':
+          description: Internal server error
+    get:
+      tags:
+        - Get-Offers-By-Park
+      summary: Get all offers by park
+      description: get all offers by park
+      operationId: getOffersByMarket
+      parameters:
+        - $ref:  '#/components/parameters/Market'
+      responses:
+        '200':
+          description: A list of all offers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offers'
+        '400':
+          description: Business rules error or parameters validation fail
+        '500':
+          description: Internal server error
 
+
+  /api/v1/parks:
+    post:
+      tags:
+        - Post-Park
+      summary: Add a new producer park
+      description: Add a new producer park
+      operationId: addProducerPark
+      requestBody:
+        $ref: '#/components/requestBodies/ParkCreationRequest'
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Park'
+        '400':
+          description: Business rules error or parameters validation fail
+        '500':
+          description: Internal server error
+
+    get:
+      tags:
+        - Get-Parks-By-Market
+      summary: Get all park by market
+      description: Get all park by market
+      operationId: getAllParkByMarket
+      parameters:
+        - $ref: '#/components/parameters/Market'
+      responses:
+        '200':
+          description: A list of all offers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parks'
+        '400':
+          description: Business rules error or parameters validation fail
+        '500':
+          description: Internal server error
 components:
-    schemas:
-        Market:
-            type: string
-            nullable: false
-            enum:
-                - PRIMARY_RESERVE
-                - SECONDARY_RESERVE
-                - FAST_RESERVE
-        Offer:
-            description: Offer placed on the market and containing one or more time blocks
-            type: object
-            required:
-              - market
-              - timeBlocks
-            properties:
-                id:
-                    description: Offer id
-                    type: string
-                    format: uuid
-                    readOnly: true
+  parameters:
+    Market:
+      name: market
+      in: query
+      required: true
+      schema:
+        $ref:  '#/components/schemas/Market'
+  schemas:
 
-                market:
-                    $ref:  '#/components/schemas/Market'
-                    required: true
-                    nullable: false
-                timeBlocks:
-                    $ref:  '#/components/schemas/TimeBlocks'
-                    required: true
+    Id:
+      type: string
+      format: uuid
+      readOnly: true
+      example: '62b97e34-5be5-11ee-8c99-0242ac120002'
+    Market:
+      type: string
+      nullable: false
+      enum:
+        - PRIMARY_RESERVE
+        - SECONDARY_RESERVE
+        - FAST_RESERVE
+    Offer:
+      description: Offer placed on the market and containing one or more time blocks
+      type: object
+      required:
+        - market
+        - timeBlocks
+      properties:
+        id:
+          description: Offer id
+          $ref: '#/components/schemas/Id'
+        market:
+          $ref:  '#/components/schemas/Market'
+          required: true
+          nullable: false
+        timeBlocks:
+          $ref:  '#/components/schemas/TimeBlocks'
+          required: true
 
-        Offers:
-            description: List of offers
-            type: object
-            required:
-              - market
-              - timeBlocks
-            properties:
-                market:
-                    description:
-                    $ref:  '#/components/schemas/Market'
-                timeBlocks:
-                    $ref:  '#/components/schemas/TimeBlocks'
+    Offers:
+      description: List of offers
+      type: array
+      items:
+        $ref: '#/components/schemas/Offer'
 
-        TimeBlock:
-            description: The time block shows the amount of energy (in MW) that will be produced and a floor price below which we will not sell.
-            type: object
-            required:
-              - energyQuantity
-              - priceLimit
-            properties:
-                id:
-                    description: time block id
-                    type: string
-                    format: uuid
-                energyQuantity:
-                    description: Energy quantity in megaWatt
-                    type: integer
-                    format: int32
-                    example: 35
-                priceLimit:
-                    description: price limit
-                    type: integer
-                    format: int32
-                    example: 2500
+    Park:
+      description:  Electricity-generating park
+      type: object
+      properties:
+        id:
+          description: park id
+          $ref: '#/components/schemas/Id'
+        type:
+          $ref: '#/components/schemas/TypePark'
 
-        TimeBlocks:
-            description: List of time blocks
-            type: array
-            oneOf:
-              - minItems: 1
-            items:
-                 $ref:  '#/components/schemas/TimeBlock'
+    Parks:
+      description: List of park
+      type: array
+      items:
+        $ref: '#/components/schemas/Park'
 
-    requestBodies:
-        OfferCreationRequest:
-            description: Offer to create
-            content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/Offer'
-            required: true
+    TimeBlock:
+      description: The time block shows the amount of energy (in MW) that will be produced and a floor price below which we will not sell.
+      type: object
+      required:
+        - energyQuantity
+        - priceLimit
+      properties:
+        id:
+          description: time block id
+          $ref: '#/components/schemas/Id'
+        energyQuantity:
+          description: Energy quantity in megaWatt
+          type: integer
+          format: int32
+          example: 35
+        priceLimit:
+          description: price limit
+          type: integer
+          format: int32
+          example: 2500
+
+    TimeBlocks:
+      description: List of time blocks
+      type: array
+      oneOf:
+        - minItems: 1
+      items:
+        $ref:  '#/components/schemas/TimeBlock'
+
+    TypePark:
+      description: kind of producer park
+      type: string
+      enum:
+        - SOLAR
+        - WIND
+        - HYDRO
+
+
+  requestBodies:
+    OfferCreationRequest:
+      description: Offer to create
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Offer'
+      required: true
+
+    ParkCreationRequest:
+      description: Park to create
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Park'
+      required: true
